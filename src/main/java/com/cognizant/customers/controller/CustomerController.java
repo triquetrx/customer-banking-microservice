@@ -28,7 +28,7 @@ public class CustomerController {
 	private CustomerService service;
 
 	@PostMapping("/create-customer")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public ResponseEntity<?> createCustomer(@RequestHeader(name = "Authorization") String token,
 			@RequestBody CustomerDTO customerDTO) {
 		
@@ -49,7 +49,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/get-all-customer")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public ResponseEntity<?> getAllCustomer(@RequestHeader(name = "Authorization") String token) {
 		try {
 			return new ResponseEntity<>(service.getAllCustomer(token),HttpStatus.OK);	
@@ -63,7 +63,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/get-customers-without-account")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public ResponseEntity<?> getAllCustomersWithoutAccount(@RequestHeader(name = "Authorization") String token) {
 		try {
 			return new ResponseEntity<>(service.getCustomersWithoutAccount(token),HttpStatus.OK);	
@@ -77,7 +77,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/get-customer-details/{customerId}")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public ResponseEntity<?> getAllCustomerdetails(@RequestHeader(name = "Authorization") String token,@PathVariable String customerId) {
 		try {
 			return new ResponseEntity<>(service.getCustomer(token, customerId),HttpStatus.OK);	
@@ -93,7 +93,7 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/mark-account-created/{customerId}")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public ResponseEntity<?> markAccountAsCreated(@RequestHeader(name="Authorization") String token,@PathVariable String customerId){
 		try {
 			service.markAccountCreated(token, customerId);
@@ -106,7 +106,7 @@ public class CustomerController {
 	}
 
 	@GetMapping("/is-account-present/{panNumber}")
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "http://localhost:5000")
 	public boolean isAccountPresent(@RequestHeader(name="Authorization")String token,@PathVariable String panNumber) {
 		return service.checkForExistingAccount(panNumber, token);
 	}

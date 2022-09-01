@@ -1,6 +1,7 @@
 package com.cognizant.customers.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public interface CustomerService {
 
 	void markAccountCreated(String token, String id);
 
-	boolean checkForExistingAccount(String panNo, String token);
+	Optional<Customer> checkForExistingAccount(String panNo, String token) throws InvalidAccessException;
 
 	List<Customer> getCustomersWithoutAccount(String token) throws InvalidAccessException;
 

@@ -35,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService{
 		String customerId = "CUST" + repository.count();
 		if (authClient.validatingToken(token).isValidStatus()) {
 			if (authClient.validatingToken(token).getUserRole().equalsIgnoreCase("ROLE_EMPLOYEE")) {
-				if (!checkForExistingAccount(customerDTO.getPanNo(),token) && !userNameExists(customerDTO.getUsername())) {
+				if (checkForExistingAccount(customerDTO.getPanNo(),token).isEmpty () && !userNameExists(customerDTO.getUsername())) {
 					String newUserLogin = authClient.addNewUser(new NewUserDTO(customerDTO.getName(),
 							customerDTO.getUsername(), customerId + customerDTO.getName().split(" ")[0], customerId));
 					if (newUserLogin.equalsIgnoreCase("New User Created")) {
@@ -101,15 +101,11 @@ public class CustomerServiceImpl implements CustomerService{
 
 	@Override
 	@Transactional
-	public boolean checkForExistingAccount(String panNo,String token) {
+	public Optional<Customer> checkForExistingAccount(String panNo,String token) throws InvalidAccessException {
 		if(authClient.validatingToken(token).isValidStatus()) {			
-			List<Customer> findByPanNo = repository.findByPanNo(panNo);
-			if (findByPanNo.isEmpty()) {
-				return false;
-			}
-			return true;
+			return repository.findByPanNo(panNo);
 		}
-		return false;
+		throw new InvalidAccessException();
 	}
 
 	@Transactional

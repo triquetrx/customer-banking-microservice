@@ -107,8 +107,17 @@ public class CustomerController {
 
 	@GetMapping("/is-account-present/{panNumber}")
 	@CrossOrigin(origins = "http://localhost:5000")
-	public boolean isAccountPresent(@RequestHeader(name="Authorization")String token,@PathVariable String panNumber) {
-		return service.checkForExistingAccount(panNumber, token);
+	public ResponseEntity<?> isAccountPresent(@RequestHeader(name="Authorization")String token,@PathVariable String panNumber) {
+		try {
+			return new ResponseEntity<>(service.checkForExistingAccount(panNumber, token),HttpStatus.OK);
+		} catch (InvalidAccessException e) {
+			// TODO Auto-generated catch block
+			return new ResponseEntity<>("UNAUTHORIZED_ACCESS",HttpStatus.UNAUTHORIZED);
+		} catch(FeignClientException e) {
+			String[] message = e.getMessage().split(" ");
+			int errCode = Integer.parseInt(message[0].split("")[1]+message[0].split("")[2]+message[0].split("")[3]);
+			return new ResponseEntity<>(message[5],HttpStatus.valueOf(errCode));
+		}
 	}
 	
 }

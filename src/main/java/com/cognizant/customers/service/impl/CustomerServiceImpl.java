@@ -3,6 +3,8 @@ package com.cognizant.customers.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class CustomerServiceImpl implements CustomerService{
 	CustomerRepository repository;
 
 	@Override
+	@Transactional
 	public String addNewCustomer(String token, CustomerDTO customerDTO)
 			throws UserLoginCreationException, InvalidAccessException, AccountExistsException {
 		String customerId = "CUST" + repository.count();
@@ -53,6 +56,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
+	@Transactional
 	public List<Customer> getAllCustomer(String token) throws InvalidAccessException {
 		if (authClient.validatingToken(token).isValidStatus()
 				&& authClient.validatingToken(token).getUserRole().equalsIgnoreCase("ROLE_EMPLOYEE")) {
@@ -62,6 +66,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
+	@Transactional
 	public List<Customer> getCustomersWithoutAccount(String token) throws InvalidAccessException {
 		if (authClient.validatingToken(token).isValidStatus()
 				&& authClient.validatingToken(token).getUserRole().equalsIgnoreCase("ROLE_EMPLOYEE")) {
@@ -71,6 +76,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
+	@Transactional
 	public Customer getCustomer(String token, String id) throws InvalidAccessException, CustomerDoesnotExistsException {
 		if (authClient.validatingToken(token).isValidStatus()
 				&& authClient.validatingToken(token).getUserRole().equalsIgnoreCase("ROLE_EMPLOYEE")) {
@@ -84,6 +90,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
+	@Transactional
 	public void markAccountCreated(String token, String id) {
 		if (authClient.validatingToken(token).isValidStatus()) {
 			Customer customer = repository.findById(id).get();
@@ -93,6 +100,7 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
+	@Transactional
 	public boolean checkForExistingAccount(String panNo,String token) {
 		if(authClient.validatingToken(token).isValidStatus()) {			
 			List<Customer> findByPanNo = repository.findByPanNo(panNo);
@@ -104,6 +112,7 @@ public class CustomerServiceImpl implements CustomerService{
 		return false;
 	}
 
+	@Transactional
 	private boolean userNameExists(String username) {
 		List<Customer> findByUsername = repository.findByUsername(username);
 		if (findByUsername.isEmpty()) {
